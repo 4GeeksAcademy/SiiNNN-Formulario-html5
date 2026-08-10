@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Payment form example</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" type="text/css" href="styles.css">
+</head>
+<body>
+
+  <div class="form-wrapper">
+    <div class="form-header">
+      <h2>Payment form example</h2>
+    </div>
+
+    <div class="form-body">
+
+      <div id="missingFieldsAlert" class="alert alert-danger d-none" role="alert">
+        Some fields are missing
+      </div>
+
+      <form id="paymentForm" class="needs-validation" novalidate>
+
+        <div class="row g-3 mb-3">
+          <div class="col-md-5">
+            <label for="cardNumber" class="form-label">Card #</label>
+            <input
+              type="text"
+              class="form-control"
+              id="cardNumber"
+              name="cardNumber"
+              placeholder="XXXXXXXXXXXXXXXX"
+              inputmode="numeric"
+              pattern="\d{16}"
+              maxlength="16"
+              title="Ingresa los 16 dígitos de la tarjeta, sin espacios"
+              required
+            >
+            <div class="invalid-feedback">Ingresa un número de tarjeta válido (16 dígitos).</div>
+          </div>
+
+          <div class="col-md-3">
+            <label for="cvc" class="form-label">CVC #</label>
+            <input
+              type="text"
+              class="form-control"
+              id="cvc"
+              name="cvc"
+              placeholder="0000"
+              inputmode="numeric"
+              pattern="\d{3,4}"
+              maxlength="4"
+              title="3 o 4 dígitos"
+              required
+            >
+            <div class="invalid-feedback">Ingresa un CVC válido (3 o 4 dígitos).</div>
+          </div>
+
+          <div class="col-md-4">
+            <label for="amount" class="form-label">Amount</label>
+            <div class="input-group">
+              <span class="input-group-text">$</span>
+              <input
+                type="number"
+                class="form-control"
+                id="amount"
+                name="amount"
+                placeholder="Amount"
+                min="0"
+                step="0.01"
+                required
+              >
+              <div class="invalid-feedback">Ingresa un importe válido.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row g-3 mb-3">
+          <div class="col-md-6">
+            <label for="firstName" class="form-label">First Name</label>
+            <input type="text" class="form-control" id="firstName" name="firstName" required>
+            <div class="invalid-feedback">Este campo es obligatorio.</div>
+          </div>
+
+          <div class="col-md-6">
+            <label for="lastName" class="form-label">Last Name</label>
+            <input type="text" class="form-control" id="lastName" name="lastName" required>
+            <div class="invalid-feedback">Este campo es obligatorio.</div>
+          </div>
+        </div>
+
+        <div class="row g-3 mb-3">
+          <div class="col-md-6">
+            <label for="city" class="form-label">City</label>
+            <input type="text" class="form-control" id="city" name="city" required>
+            <div class="invalid-feedback">Este campo es obligatorio.</div>
+          </div>
+
+          <div class="col-md-4">
+            <label for="state" class="form-label">State</label>
+            <select class="form-select" id="state" name="state" required>
+              <option value="" selected disabled>Pick a state</option>
+              <option value="AL">Alabama</option>
+              <option value="CA">California</option>
+              <option value="FL">Florida</option>
+              <option value="NY">New York</option>
+              <option value="TX">Texas</option>
+              <option value="WA">Washington</option>
+            </select>
+            <div class="invalid-feedback">Selecciona un estado.</div>
+          </div>
+
+          <div class="col-md-2">
+            <label for="postalCode" class="form-label">Postal Code</label>
+            <input
+              type="text"
+              class="form-control"
+              id="postalCode"
+              name="postalCode"
+              inputmode="numeric"
+              pattern="\d{5}(-\d{4})?"
+              title="Código postal válido, ej. 12345 o 12345-6789"
+              required
+            >
+            <div class="invalid-feedback">Código postal inválido.</div>
+          </div>
+        </div>
+
+        <div class="row g-3 mb-3">
+          <div class="col-md-6">
+            <label class="form-label d-block">We accept:</label>
+            <div class="payment-methods" role="radiogroup" aria-label="Métodos de pago aceptados">
+              <label class="method-option">
+                <input type="radio" name="paymentMethod" value="mastercard" required>
+                <span class="brand-badge">MC</span>
+              </label>
+              <label class="method-option">
+                <input type="radio" name="paymentMethod" value="visa">
+                <span class="brand-badge">VISA</span>
+              </label>
+              <label class="method-option">
+                <input type="radio" name="paymentMethod" value="diners">
+                <span class="brand-badge">DC</span>
+              </label>
+              <label class="method-option">
+                <input type="radio" name="paymentMethod" value="amex">
+                <span class="brand-badge">AMEX</span>
+              </label>
+            </div>
+          </div>
+
+          <div class="col-md-6">
+            <label for="message" class="form-label">Message</label>
+            <textarea class="form-control" id="message" name="message" rows="4" aria-describedby="messageHelp"></textarea>
+            <div id="messageHelp" class="form-text">Add any notes here.</div>
+          </div>
+        </div>
+
+      </form>
+    </div>
+
+    <div class="form-footer">
+      <button type="button" class="btn btn-secondary" id="cancelBtn">Cancel</button>
+      <button type="submit" form="paymentForm" class="btn btn-primary" id="sendBtn">Send</button>
+    </div>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
+  <script>
+    const form = document.getElementById('paymentForm');
+    const missingFieldsAlert = document.getElementById('missingFieldsAlert');
+
+    form.addEventListener('submit', function (event) {
+      event.preventDefault();
+      event.stopPropagation();
+
+      if (!form.checkValidity()) {
+        missingFieldsAlert.classList.remove('d-none');
+      } else {
+        missingFieldsAlert.classList.add('d-none');
+        alert('¡Formulario enviado correctamente!');
+        form.reset();
+        form.classList.remove('was-validated');
+      }
+
+      form.classList.add('was-validated');
+    });
+
+    document.getElementById('cancelBtn').addEventListener('click', function () {
+      form.reset();
+      form.classList.remove('was-validated');
+      missingFieldsAlert.classList.add('d-none');
+    });
+  </script>
+
+</body>
+</html>
